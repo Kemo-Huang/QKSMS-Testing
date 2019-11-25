@@ -28,6 +28,7 @@ import android.database.sqlite.SqliteWrapper;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -144,6 +145,9 @@ public class TransactionService extends Service implements Observer {
     private boolean lollipopReceiving = false;
 
     private PowerManager.WakeLock mWakeLock;
+
+    // kemo
+    private final IBinder binder = new LocalBinder();
 
     public Handler mToastHandler = new Handler() {
         @Override
@@ -403,9 +407,21 @@ public class TransactionService extends Service implements Observer {
         }
     }
 
+    /**
+     * @author kemo
+     */
+    public class LocalBinder extends Binder {
+        public TransactionService getService() {
+            // Return this instance of LocalService so clients can call public methods
+            return TransactionService.this;
+        }
+    }
+    /**
+     * @author kemo
+     */
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return binder;
     }
 
     /**
@@ -519,8 +535,8 @@ public class TransactionService extends Service implements Observer {
             }
         }
 
-        int result = mConnMgr.startUsingNetworkFeature(ConnectivityManager.TYPE_MOBILE, "enableMMS");
-
+//        int result = mConnMgr.startUsingNetworkFeature(ConnectivityManager.TYPE_MOBILE, "enableMMS");
+        int result = 0;
         Timber.v("beginMmsConnectivity: result=" + result);
 
         switch (result) {
@@ -540,9 +556,9 @@ public class TransactionService extends Service implements Observer {
             // cancel timer for renewal of lease
             mServiceHandler.removeMessages(EVENT_CONTINUE_MMS_CONNECTIVITY);
             if (mConnMgr != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                mConnMgr.stopUsingNetworkFeature(
-                        ConnectivityManager.TYPE_MOBILE,
-                        "enableMMS");
+//                mConnMgr.stopUsingNetworkFeature(
+//                        ConnectivityManager.TYPE_MOBILE,
+//                        "enableMMS");
             }
         } finally {
             releaseWakeLock();
