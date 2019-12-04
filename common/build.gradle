@@ -23,8 +23,8 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        minSdkVersion 26
-        targetSdkVersion 29
+        minSdkVersion 21
+        targetSdkVersion 28 // Don't upgrade to 29 until we support Scoped storage
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
