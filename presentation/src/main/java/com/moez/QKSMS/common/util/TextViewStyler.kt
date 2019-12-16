@@ -18,9 +18,11 @@
  */
 package com.moez.QKSMS.common.util
 
+import android.content.ContentValues.TAG
 import android.graphics.Typeface
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import com.moez.QKSMS.R
@@ -97,8 +99,9 @@ class TextViewStyler @Inject constructor(
     }
 
     fun applyAttributes(textView: TextView, attrs: AttributeSet?) {
-        var colorAttr = 0
-        var textSizeAttr = 0
+
+        var colorAttr: Int
+        var textSizeAttr: Int
 
         if (!prefs.systemFont.get()) {
             fontProvider.getLato { lato ->
@@ -121,7 +124,6 @@ class TextViewStyler @Inject constructor(
 
             else -> return
         }
-
         when (colorAttr) {
             COLOR_THEME -> textView.setTextColor(colors.theme().theme)
             COLOR_PRIMARY_ON_THEME -> textView.setTextColor(colors.theme().textPrimary)
