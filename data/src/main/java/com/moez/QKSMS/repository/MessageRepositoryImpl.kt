@@ -67,13 +67,13 @@ import javax.inject.Singleton
 
 @Singleton
 class MessageRepositoryImpl @Inject constructor(
-    private val activeConversationManager: ActiveConversationManager,
-    private val context: Context,
-    private val imageRepository: ImageRepository,
-    private val messageIds: KeyManager,
-    private val phoneNumberUtils: PhoneNumberUtils,
-    private val prefs: Preferences,
-    private val syncRepository: SyncRepository
+        private val activeConversationManager: ActiveConversationManager,
+        private val context: Context,
+        private val imageRepository: ImageRepository,
+        private val messageIds: KeyManager,
+        private val phoneNumberUtils: PhoneNumberUtils,
+        private val prefs: Preferences,
+        private val syncRepository: SyncRepository
 ) : MessageRepository {
 
     override fun getMessages(threadId: Long, query: String): RealmResults<Message> {
@@ -144,7 +144,8 @@ class MessageRepositoryImpl @Inject constructor(
     override fun savePart(id: Long): File? {
         val part = getPart(id) ?: return null
 
-        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(part.type) ?: return null
+        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(part.type)
+                ?: return null
         val date = part.messages?.first()?.date
         val dir = File(Environment.getExternalStorageDirectory(), "QKSMS/Media").apply { mkdirs() }
         val fileName = part.name?.takeIf { name -> name.endsWith(extension) }
@@ -268,12 +269,12 @@ class MessageRepositoryImpl @Inject constructor(
     }
 
     override fun sendMessage(
-        subId: Int,
-        threadId: Long,
-        addresses: List<String>,
-        body: String,
-        attachments: List<Attachment>,
-        delay: Int
+            subId: Int,
+            threadId: Long,
+            addresses: List<String>,
+            body: String,
+            attachments: List<Attachment>,
+            delay: Int
     ) {
         val signedBody = when {
             prefs.signature.get().isEmpty() -> body
@@ -339,6 +340,7 @@ class MessageRepositoryImpl @Inject constructor(
                     .map { attachment -> attachment.vCard.toByteArray() }
                     .map { vCard -> MMSPart("contact", ContentType.TEXT_VCARD, vCard) }
 
+            // We need to strip the separators from outgoing MMS, or else they'll appear to have sent and not go through
             val transaction = Transaction(context)
             val recipients = addresses.map(phoneNumberUtils::normalizeNumber)
             transaction.sendNewMessage(subId, threadId, recipients, parts, null, null)
