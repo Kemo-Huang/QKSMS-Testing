@@ -121,7 +121,6 @@ class TextViewStyler @Inject constructor(
 
             else -> return
         }
-
         when (colorAttr) {
             COLOR_THEME -> textView.setTextColor(colors.theme().theme)
             COLOR_PRIMARY_ON_THEME -> textView.setTextColor(colors.theme().textPrimary)
