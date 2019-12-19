@@ -97,8 +97,8 @@ class TextViewStyler @Inject constructor(
     }
 
     fun applyAttributes(textView: TextView, attrs: AttributeSet?) {
-        var colorAttr = 0
-        var textSizeAttr = 0
+        var colorAttr: Int
+        var textSizeAttr: Int
 
         if (!prefs.systemFont.get()) {
             fontProvider.getLato { lato ->
